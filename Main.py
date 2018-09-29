@@ -1,2 +1,2 @@
-print("Hello world")
+import FourierTank as FT
 
