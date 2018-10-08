@@ -46,3 +46,9 @@ class PhonemeProfile:
             "/ea/": 0,
             "/ue/": 0,
         }
+
+
+class Phoneme:
+    accuracy = 0.0
+    clip = []
+    string = ''
