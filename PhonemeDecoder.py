@@ -12,9 +12,10 @@ class PhonemeDecoder:
     def __init__(self):
         self.profile = pp.PhonemeProfile("en-en")
     
-    def getPhonemeProfile(self, filename):
+    def addToPhonemeProfile(self, filename):
         segments = self.decode(filename)
         for seg in segments:
+            #TODO: Get the audio segments related to the phonemes
             self.profile.addPhoneme(seg.word, seg.prob, [])
 
         print("Is complete: ", self.profile.isComplete())
@@ -34,17 +35,19 @@ class PhonemeDecoder:
             break
         decoder.end_utt()
 
+        # segmentStrings = [seg.word + " ("+str(seg.start_frame)+","+str(seg.end_frame)+")\n" for seg in segments]
+        # segmentString = ""
+        # for ss in segmentStrings:
+        #   segmentString += ss
+        # print(segmentString)
+
         segments = [seg for seg in decoder.seg()]
-        segmentStrings = [seg.word + " ("+str(seg.start_frame)+","+str(seg.end_frame)+")\n" for seg in segments]
-
-        segmentString = ""
-        for ss in segmentStrings:
-          segmentString += ss
-
-        print(segmentString)
-
         return segments
 
+        
+
+    #RETURNS: A phoneme decoder with configurated settings
+    #TODO: De-hardcode this stuff
     def getDecoder(self):
         config = Decoder.default_config()
         config.set_string('-hmm', path.join(MODELDIR, 'en-us\\en-us'))
@@ -55,3 +58,7 @@ class PhonemeDecoder:
 
         # Decode streaming data.
         return Decoder(config)
+
+    #RETURNS: The created profile
+    def getProfile(self):
+        return self.profile
