@@ -13,11 +13,8 @@ class PhonemeDecoder:
         self.profile = pp.PhonemeProfile("en-en")
     
     def addToPhonemeProfile(self, filename):
-        segments = self.decode(filename)
-        for seg in segments:
-            #TODO: Get the audio segments related to the phonemes
-            self.profile.addPhoneme(seg.word, seg.prob, [])
-
+        self.decode(filename)
+        
         print("Is complete: ", self.profile.isComplete())
         print("Complete %: ", self.profile.completePercentage()*100)
         print("Missing phones: ", reduce(lambda a,b: a + " " + b, self.profile.missingPhonemes(), ""))
@@ -25,24 +22,29 @@ class PhonemeDecoder:
     def decode(self, filename):
         # Create a decoder with certain model
         decoder = self.getDecoder()
+        
+        file = "";
         decoder.start_utt()
-        stream = open(filename, 'rb')
-        while True:
-          buf = stream.read(1024)
-          if buf:
-            decoder.process_raw(buf, False, False)
-          else:
-            break
+        with open(filename, 'rb') as stream:
+            while True:
+              buf = stream.read(1024)
+              if buf:
+                decoder.process_raw(buf, False, False)
+                file += buf;
+              else:
+                break
         decoder.end_utt()
+        # print(file);
+
+        segments = [seg for seg in decoder.seg()]
+        for seg in segments:
+            self.profile.addPhoneme(seg.word, abs(seg.ascore), file[seg.start_frame:seg.end_frame])
 
         # segmentStrings = [seg.word + " ("+str(seg.start_frame)+","+str(seg.end_frame)+")\n" for seg in segments]
         # segmentString = ""
         # for ss in segmentStrings:
         #   segmentString += ss
         # print(segmentString)
-
-        segments = [seg for seg in decoder.seg()]
-        return segments
 
         
 
