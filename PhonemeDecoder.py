@@ -1,5 +1,6 @@
 from os import environ, path
 import wave
+import PhonemeProfile as pp
 from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 
@@ -7,9 +8,18 @@ MODELDIR = "C:\Users\hanno\Google Drive\Vakken\Y3S1\Onderzoeksmethoden\Voice dec
 DATADIR = "/"
 
 class PhonemeDecoder:
+    "Keep a profile for the entire duration, this makes it so we can decode multiple files for a complete profile"
+    def __init__(self):
+        self.profile = pp.PhonemeProfile("en-en")
+    
     def getPhonemeProfile(self, filename):
         segments = self.decode(filename)
-        #TODO: Make phoneme profile out of segments
+        for seg in segments:
+            self.profile.addPhoneme(seg.word, seg.prob, [])
+
+        print("Is complete: ", self.profile.isComplete())
+        print("Complete %: ", self.profile.completePercentage()*100)
+        print("Missing phones: ", reduce(lambda a,b: a + " " + b, self.profile.missingPhonemes(), ""))
 
     def decode(self, filename):
         # Create a decoder with certain model

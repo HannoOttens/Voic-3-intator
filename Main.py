@@ -1,7 +1,7 @@
 import PhonemeDecoder as pd
 
 pdecoder = pd.PhonemeDecoder()
-pdecoder.decode('pangram-3.raw')
+pdecoder.getPhonemeProfile('pangram-3.raw')
 
 
 
