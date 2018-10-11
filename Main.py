@@ -1,12 +1,12 @@
 import PhonemeDecoder as pd
 
 pdecoder = pd.PhonemeDecoder()
-pdecoder.addToPhonemeProfile('pangram-3.raw')
+pdecoder.addToPhonemeProfile('pangram-6.raw')
 
 
-for key,phoneme in pdecoder.profile.phonemes.items():
-    print(key + " \t " + (str(phoneme.accuracy) + "\t" + phoneme.clip.replace('\n', '').replace('\r', '')  if phoneme is not None else "!MISSING!"))
-    print('================')
+# for key,phoneme in pdecoder.profile.phonemes.items():
+#     print(key + " \t " + (str(phoneme.accuracy) + "\t" + phoneme.clip.replace('\n', '').replace('\r', '')  if phoneme is not None else "!MISSING!"))
+#     print('================')
 # import matplotlib.pyplot as plt
 # from scipy.fftpack import fft
 # from scipy.io import wavfile # get the api

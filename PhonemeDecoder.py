@@ -21,7 +21,7 @@ class PhonemeDecoder:
 
     def decode(self, filename):
         # Create a decoder with certain model
-        decoder = self.getDecoder()
+        decoder = self.getPhonemeDecoder()
         
         file = "";
         decoder.start_utt()
@@ -34,7 +34,6 @@ class PhonemeDecoder:
               else:
                 break
         decoder.end_utt()
-        # print(file);
 
         segments = [seg for seg in decoder.seg()]
         for seg in segments:
@@ -50,7 +49,7 @@ class PhonemeDecoder:
 
     #RETURNS: A phoneme decoder with configurated settings
     #TODO: De-hardcode this stuff
-    def getDecoder(self):
+    def getPhonemeDecoder(self):
         config = Decoder.default_config()
         config.set_string('-hmm', path.join(MODELDIR, 'en-us\\en-us'))
         config.set_string('-allphone', path.join(MODELDIR, 'en-us\\en-us-phone.lm.dmp'))
@@ -60,6 +59,14 @@ class PhonemeDecoder:
 
         # Decode streaming data.
         return Decoder(config)
+
+    def getDictionaryDecoder(self):
+        config = Decoder.default_config()
+        config.set_string('-hmm', path.join(MODELDIR, 'en-us/en-us'))
+        config.set_string('-lm', path.join(MODELDIR, 'en-us/en-us.lm.bin'))
+        config.set_string('-dict', path.join(MODELDIR, 'en-us/cmudict-en-us.dict'))
+        return Decoder(config)
+
 
     #RETURNS: The created profile
     def getProfile(self):
