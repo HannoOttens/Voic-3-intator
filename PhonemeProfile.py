@@ -94,6 +94,7 @@ class PhonemeProfile:
         p = self.phonemes[phoneme]
         if p is not None:
             return p.clip
+        print "ERROR MISSING PHONEME: " + phoneme
         return []
 
 class Phoneme:

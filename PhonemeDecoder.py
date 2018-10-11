@@ -25,25 +25,41 @@ class PhonemeDecoder:
         
         file = "";
         decoder.start_utt()
+        buflen = 0
         with open(filename, 'rb') as stream:
             while True:
               buf = stream.read(1024)
               if buf:
                 decoder.process_raw(buf, False, False)
+                buflen += (len(buf))
                 file += buf;
               else:
                 break
         decoder.end_utt()
         segments = [seg for seg in decoder.seg()]
-        framemultiplier = int(len(file)/segments[-1].end_frame)
+        filelen = len(file)
+        filetime = len(file)/(320.0/4.0) #In 100ths of a second
 
         print("FILELENGTH: ",len(file))
-        print("FRAME: ", framemultiplier)
+        print("BUFLEN: ",buflen)
+        print("FILETIME: ", filetime)
+        endbyte = int(filelen*(segments[-1].end_frame/filetime))
+        print("PROJECTED ENDBYTE: ",endbyte)
+        print("ENDFRAM: ", segments[-1].end_frame)
+
+        import numpy as N
+        import array
+        fileobj = open(filename, mode='rb')
+        binvalues = array.array('f')
+        binvalues.read(fileobj, filelen/4)
+
+        # data = N.array(binvalues, dtype=float)
 
         for seg in segments:
-            startbyte = framemultiplier*seg.start_frame
-            endbyte = framemultiplier*seg.end_frame
-            self.profile.addPhoneme(seg.word, abs(seg.ascore), file[startbyte:endbyte])
+            startbyte = int(filelen*(seg.start_frame/filetime))
+            endbyte = int(filelen*(seg.end_frame/filetime))
+            print(seg.word, startbyte, endbyte)
+            self.profile.addPhoneme(seg.word, abs(seg.ascore), binvalues[startbyte:endbyte])
 
         
 

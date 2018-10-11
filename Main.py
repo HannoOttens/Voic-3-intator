@@ -1,4 +1,6 @@
 import PhonemeDecoder as pd
+import audioop
+import array
 
 pdecoder = pd.PhonemeDecoder()
 pdecoder.addToPhonemeProfile('goforward.raw')
@@ -6,23 +8,51 @@ profile = pdecoder.getProfile()
 
 print("RECORDED:", profile.recordedPhonemes())
 
-newaudioclip = ""
+newaudioclip = array.array('f')
+
+slience = array.array('f')
+for i in range(640):
+    slience.append(0.0)
+# lilsilence = "" 
+# for i in range(1000):
+#     lilsilence += "  "
+
 
 g = profile.getPhonemeClip
-newaudioclip += g("R")
-newaudioclip += g("OW")
-newaudioclip += "                    "
-newaudioclip += g("F")
-newaudioclip += g("AO")
-newaudioclip += g("OW")
-newaudioclip += g("AE")
-newaudioclip += g("R")
-newaudioclip += g("D")
+
+# newaudioclip += slience
+# newaudioclip += g("R")
+# newaudioclip += g("OW")
+newaudioclip.extend(slience)
+newaudioclip.extend(g("G"))
+newaudioclip.extend(g("R"))
+newaudioclip.extend(g("AO"))
+newaudioclip.extend(g("OW"))
+newaudioclip.extend(g("N"))
+newaudioclip.extend(g("NG"))
+newaudioclip.extend(slience)
+newaudioclip.extend(g("G"))
+newaudioclip.extend(g("OW"))
+newaudioclip.extend(g("T"))
+newaudioclip.extend(slience)
+newaudioclip.extend(g("T"))
+newaudioclip.extend(g("AE"))
+newaudioclip.extend(g("N"))
+newaudioclip.extend(g("NG"))
+newaudioclip.extend(g("T"))
+newaudioclip.extend(slience)
+newaudioclip.extend(g("F"))
+newaudioclip.extend(g("R"))
+newaudioclip.extend(g("AO"))
+newaudioclip.extend(g("G"))
 
 
-f = open('result.raw', 'wb')
-f.write(newaudioclip)
+f = open('result.raw',  'wb')
+newaudioclip.tofile(f)
 f.close()
+
+
+
 
 # for key,phoneme in pdecoder.profile.phonemes.items():
 #     print(key + " \t " + (str(phoneme.accuracy) + "\t" + phoneme.clip.replace('\n', '').replace('\r', '')  if phoneme is not None else "!MISSING!"))
