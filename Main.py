@@ -1,8 +1,28 @@
 import PhonemeDecoder as pd
 
 pdecoder = pd.PhonemeDecoder()
-pdecoder.addToPhonemeProfile('pangram-6.raw')
+pdecoder.addToPhonemeProfile('goforward.raw')
+profile = pdecoder.getProfile()
 
+print("RECORDED:", profile.recordedPhonemes())
+
+newaudioclip = ""
+
+g = profile.getPhonemeClip
+newaudioclip += g("R")
+newaudioclip += g("OW")
+newaudioclip += "                    "
+newaudioclip += g("F")
+newaudioclip += g("AO")
+newaudioclip += g("OW")
+newaudioclip += g("AE")
+newaudioclip += g("R")
+newaudioclip += g("D")
+
+
+f = open('result.raw', 'wb')
+f.write(newaudioclip)
+f.close()
 
 # for key,phoneme in pdecoder.profile.phonemes.items():
 #     print(key + " \t " + (str(phoneme.accuracy) + "\t" + phoneme.clip.replace('\n', '').replace('\r', '')  if phoneme is not None else "!MISSING!"))

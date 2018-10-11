@@ -33,7 +33,6 @@ class PhonemeProfile:
             "R": None,
             "S": None,
             "SH": None,
-            "SIL": None,
             "T": None,
             "TH": None,
             "UH": None,
@@ -43,8 +42,9 @@ class PhonemeProfile:
             "Y": None,
             "Z": None,
             "ZH": None,
+            "SIL": None,
             "+SPN+": None,
-            # "ea": 0,
+            "+NSN+": None,
             # "ue": 0,
         }
 
@@ -74,15 +74,27 @@ class PhonemeProfile:
                misPhones.append(key)
         return misPhones
 
+    #RETURNS: A list of recorded phonemes
+    def recordedPhonemes(self):
+        recPhones = []
+        for key,phoneme in self.phonemes.iteritems():
+           if(phoneme is not None): 
+               recPhones.append(key)
+        return recPhones
+
     #RETURNS: Average accuracy of phoneme recognition
     def phonemeAccuracy(self):
         #exception when the model is incomplete
         if(not self.isComplete):
             raise ValueError("The phoneme model wasn't not complete")
         #add all of te phonemes up and devide by the total
-        return reduce(lambda a,b: a + b.accuracy, self.phonemes, 0) / len(self.phonemes)
+        return reduce(lambda a,b: a + b.accuracy, self.phonemes, 0) / float(len(self.phonemes))
         
-
+    def getPhonemeClip(self, phoneme):
+        p = self.phonemes[phoneme]
+        if p is not None:
+            return p.clip
+        return []
 
 class Phoneme:
     def __init__(self, accuracy, clip, word):

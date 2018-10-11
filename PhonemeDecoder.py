@@ -34,10 +34,18 @@ class PhonemeDecoder:
               else:
                 break
         decoder.end_utt()
-
         segments = [seg for seg in decoder.seg()]
+        framemultiplier = int(len(file)/segments[-1].end_frame)
+
+        print("FILELENGTH: ",len(file))
+        print("FRAME: ", framemultiplier)
+
         for seg in segments:
-            self.profile.addPhoneme(seg.word, abs(seg.ascore), file[seg.start_frame:seg.end_frame])
+            startbyte = framemultiplier*seg.start_frame
+            endbyte = framemultiplier*seg.end_frame
+            self.profile.addPhoneme(seg.word, abs(seg.ascore), file[startbyte:endbyte])
+
+        
 
         # segmentStrings = [seg.word + " ("+str(seg.start_frame)+","+str(seg.end_frame)+")\n" for seg in segments]
         # segmentString = ""
