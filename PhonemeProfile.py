@@ -1,3 +1,5 @@
+import array
+
 "Codes matching sphinx output"
 class PhonemeProfile:
     def __init__(self, name):
@@ -52,7 +54,8 @@ class PhonemeProfile:
     def addPhoneme(self, word, accuracy, segmentClip):
         if(self.phonemes[word] is None 
             #Check if this prediction is more accurate than the previous, if so, replace it.
-            or self.phonemes[word].accuracy < accuracy):
+            or self.phonemes[word].accuracy > accuracy):
+            print "UPDATED: " + word + " \t|| ACC: " + str(accuracy) + "\t|| CLIPSIZE:" + str(len(segmentClip)) 
             self.phonemes[word] = Phoneme(accuracy, segmentClip, word)
 
     #RETURNS: If all the phonmes of the profile are filled in
@@ -91,11 +94,27 @@ class PhonemeProfile:
         return reduce(lambda a,b: a + b.accuracy, self.phonemes, 0) / float(len(self.phonemes))
         
     def getPhonemeClip(self, phoneme):
+        if(phoneme is 'SIL'):
+            return self.getSilence()
+
         p = self.phonemes[phoneme]
         if p is not None:
             return p.clip
-        print "ERROR MISSING PHONEME: " + phoneme
+
+        print "[ERROR] MISSING PHONEME: " + phoneme
         return []
+
+    def getSilence(self): 
+        slience = array.array('f')
+        for i in range(1280):
+            slience.append(0.0)
+        return slience
+
+    def createSequence(self, phonemes):
+        clip = array.array('f')
+        for phon in phonemes:
+            clip.extend(self.getPhonemeClip(phon))
+        return clip 
 
 class Phoneme:
     def __init__(self, accuracy, clip, word):
