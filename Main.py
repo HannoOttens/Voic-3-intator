@@ -2,15 +2,18 @@ import PhonemeDecoder as pd
 import array
 pdecoder = pd.PhonemeDecoder()
 
-for i in range(1,7):
-    print('RES1-0' + str(i) + '.raw')
-    pdecoder.addToPhonemeProfile('RES5-0' + str(i) + '.raw')
+for i in range(1,10):
+    print('DEMO-0' + str(i) + '.raw')
+    pdecoder.addToPhonemeProfile('DEMO-0' + str(i) + '.raw')
+pdecoder.addToPhonemeProfile('DEMO-10.raw')
+pdecoder.addToPhonemeProfile('DEMO-11.raw')
+pdecoder.addToPhonemeProfile('DEMO-12.raw')
 profile = pdecoder.getProfile()
 
 print("RECORDED:", profile.recordedPhonemes())
 
 newaudioclip = profile.createSequence(
-    ["SIL", "R", "IY", "S", "ER", "CH", "SIL", "IH", "Z", "SIL", "AO", "S", "AH", "M", "SIL"]
+    ["HH","EH","L","OW","SIL", "W","ER","L","T"]
 )
 
 f = open('result.raw',  'wb')

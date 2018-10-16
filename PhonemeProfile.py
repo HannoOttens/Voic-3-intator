@@ -55,7 +55,7 @@ class PhonemeProfile:
         if(self.phonemes[word] is None 
             #Check if this prediction is more accurate than the previous, if so, replace it.
             or self.phonemes[word].accuracy > accuracy):
-            print "UPDATED: " + word + " \t|| ACC: " + str(accuracy) + "\t|| CLIPSIZE:" + str(len(segmentClip)) 
+            # print "UPDATED: " + word + " \t|| ACC: " + str(accuracy) + "\t|| CLIPSIZE:" + str(len(segmentClip)) 
             self.phonemes[word] = Phoneme(accuracy, segmentClip, word)
 
     #RETURNS: If all the phonmes of the profile are filled in
