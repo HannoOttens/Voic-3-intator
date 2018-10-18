@@ -93,6 +93,7 @@ class PhonemeProfile:
         #add all of te phonemes up and devide by the total
         return reduce(lambda a,b: a + b.accuracy, self.phonemes, 0) / float(len(self.phonemes))
         
+    #RETURNS: An array of floats represeting the sound of the phoneme
     def getPhonemeClip(self, phoneme):
         if(phoneme is 'SIL'):
             return self.getSilence()
@@ -104,15 +105,25 @@ class PhonemeProfile:
         print "[ERROR] MISSING PHONEME: " + phoneme
         return []
 
+    #RETURNS: An array of floats, representing the audio equivalent of silence (1280x0.0)
     def getSilence(self): 
-        slience = array.array('f')
+        silence = array.array('f')
         for i in range(1280):
-            slience.append(0.0)
-        return slience
+            silence.append(0.0)
+        return silence
+    
+    #RETURNS: An array of floats, representing the audio equivalent of silence (1280x0.0)
+    def getPadding(self): 
+        padding = array.array('f')
+        for i in range(8):
+            padding.append(0.0)
+        return padding
 
+    #RETURNS: A clip of phonemes sequenced back-to-back
     def createSequence(self, phonemes):
         clip = array.array('f')
         for phon in phonemes:
+            clip.extend(self.getPadding())
             clip.extend(self.getPhonemeClip(phon))
         return clip 
 

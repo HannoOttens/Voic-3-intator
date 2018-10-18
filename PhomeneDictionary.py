@@ -7,13 +7,11 @@ class PhonemeDictionary:
 
     def getPhonemesForSentence(self, sentence):
         phones = []
-        first = True
         #Split sentence into words
         for word in sentence.split():
-            if not first:
-                phones.append("SIL")
-            first = False
+            phones.append("SIL")
             phones += self.getPhonemesForWord(word)
+        phones.append("SIL")
         return phones        
 
     #RETURNS: Array of phonemes for a word
