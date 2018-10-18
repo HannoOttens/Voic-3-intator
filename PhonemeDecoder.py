@@ -6,16 +6,16 @@ from sphinxbase.sphinxbase import *
 import numpy as N
 import array
 
-MODELDIR = "C:\Users\hanno\Google Drive\Vakken\Y3S1\Onderzoeksmethoden\Voice decoder\Voic-3-intator\models"
-DATADIR = "Recordings"
 
 class PhonemeDecoder:
     "Keep a profile for the entire duration, this makes it so we can decode multiple files for a complete profile"
-    def __init__(self):
+    def __init__(self, modeldir, datadir):
         self.profile = pp.PhonemeProfile("en-en")
+        self.modeldir = modeldir
+        self.datadir = datadir
     
     def addToPhonemeProfile(self, filename):
-        self.decode(path.join(DATADIR, filename))
+        self.decode(path.join(self.datadir, filename))
         
         # print("Is complete: ", self.profile.isComplete())
         # print("Complete %: ", self.profile.completePercentage()*100)
@@ -60,9 +60,9 @@ class PhonemeDecoder:
     #TODO: De-hardcode this stuff
     def getPhonemeDecoder(self):
         config = Decoder.default_config()
-        config.set_string('-hmm', path.join(MODELDIR, 'en-us\\en-us'))
-        config.set_string('-allphone', path.join(MODELDIR, 'en-us\\en-us-phone.lm.dmp'))
-        config.set_string('-logfn', path.join(MODELDIR, 'log.txt'))
+        config.set_string('-hmm', path.join(self.modeldir, 'en-us\\en-us'))
+        config.set_string('-allphone', path.join(self.modeldir, 'en-us\\en-us-phone.lm.dmp'))
+        config.set_string('-logfn', path.join(self.modeldir, 'log.txt'))
          
         config.set_float('-lw', 2.0)
         config.set_float('-beam', 1e-10)
@@ -74,9 +74,9 @@ class PhonemeDecoder:
     #RETURNS: A decoder trying to find words from a dictionary
     def getDictionaryDecoder(self):
         config = Decoder.default_config()
-        config.set_string('-hmm', path.join(MODELDIR, 'en-us/en-us'))
-        config.set_string('-lm', path.join(MODELDIR, 'en-us/en-us.lm.bin'))
-        config.set_string('-dict', path.join(MODELDIR, 'en-us/cmudict-en-us.dict'))
+        config.set_string('-hmm', path.join(self.modeldir, 'en-us/en-us'))
+        config.set_string('-lm', path.join(self.modeldir, 'en-us/en-us.lm.bin'))
+        config.set_string('-dict', path.join(self.modeldir, 'en-us/cmudict-en-us.dict'))
         return Decoder(config)
 
 
