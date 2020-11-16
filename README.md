@@ -1,2 +1,2 @@
 # Voic-3-intator
-Best project ever.
+A text to speech program based on your own voice
